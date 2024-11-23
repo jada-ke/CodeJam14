@@ -8,27 +8,27 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-        body {
-            min-height: 100vh;
-            background-color: #1a1a1a;
-        }
-        
-        .sidebar {
-            height: 100%;
-            width: 75px;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: 1a1a1a;
-            border-right: 1px solid grey;
-            transition: width 0.3s ease, border-right 0.3s ease;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-            white-space: nowrap;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        }
+      body {
+          min-height: 100vh;
+          background-color: #1a1a1a;
+      }
+      
+      .sidebar {
+        height: 100%;
+        width: 85px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: 1a1a1a;
+        border-right: 1px solid grey;
+        transition: width 0.3s ease, border-right 0.3s ease;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        white-space: nowrap;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+      }
 
         .sidebar a {
                 padding: 8px 8px 8px 32px;
@@ -191,11 +191,11 @@
   
   <div class="sidebar" id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
     <div class="d-flex flex-column h-100">
-        <a href="#"><span><i class="material-icons">info</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;about</span></a><br>
-        <a href="#"><i class="material-icons">spa</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;services</a></span>
+        <a href="#"><span><i class="material-icons">info</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;about</span></a><br>
+        <a href="#"><i class="material-icons">spa</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;services</a></span>
         </a><br>
-        <a href="#"><i class="material-icons">monetization_on</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;clients</span></a><br>
-        <a href="#"><i class="material-icons">email</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;contact<span></a>
+        <a href="#"><i class="material-icons">monetization_on</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clients</span></a><br>
+        <a href="#"><i class="material-icons">email</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contact<span></a>
     </div>
   </div>
 
@@ -212,8 +212,8 @@
             this.mini = false;
         } else {
             console.log("closing sidebar");
-            document.getElementById("mySidebar").style.width = "75px";
-            document.getElementById("main").style.marginLeft = "75px";
+            document.getElementById("mySidebar").style.width = "85px";
+            document.getElementById("main").style.marginLeft = "85px";
             document.getElementById("main").style.scale = "1.0";
             forecastChart.style.width = "calc(100% - 75px)";
             this.mini = true;

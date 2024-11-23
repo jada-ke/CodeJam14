@@ -10,7 +10,7 @@
     <style>
       body {
           min-height: 100vh;
-          background-color: #1a1a1a;
+          background-color: black;
       }
       
       .sidebar {
@@ -77,7 +77,7 @@
       
         .card {
             /*background-color: #2c3034;*/
-            background-image: linear-gradient(to bottom right, #3d3e40, rgba(0, 0, 0, 0.691));
+            background-image: linear-gradient(to bottom right, #47464687, #171616);
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: flex;
@@ -258,61 +258,78 @@
   <script>
       // Set initial dates
       const today = new Date();
+      const todayString = today.toISOString().split('T')[0];
       const fiveDaysAgo = new Date(today);
       fiveDaysAgo.setDate(today.getDate() - 5);
+      const futureLimit = new Date(today);
+      futureLimit.setDate(today.getDate() + 7);
+      const futureLimitString = futureLimit.toISOString().split('T')[0];
       
       //document.getElementById('startDate').value = fiveDaysAgo.toISOString().split('T')[0];
       //document.getElementById('endDate').value = today.toISOString().split('T')[0];
-
+      
       // Plotly chart configuration
       const layout = {
           title: {
               //text: 'Forex Prediction',
               font: { color: '#ffffff', size: 24 }
-          },
-          paper_bgcolor: 'rgb(44,48,52,0)',
-          plot_bgcolor: 'rgb(44,48,52,0)',
-          xaxis: {
-              title: 'Date',
-              gridcolor: '#3b4046',
-              color: '#ffffff',
-              tickformat: '%Y-%m-%d'
-          },
-          yaxis: {
-              gridcolor: '#3b4046',
-              color: '#ffffff'
-          },
-          hoverlabel: {
-            bgcolor: '#1a1a1a',  // Background color of the hover labels
-            font: {
-                color: 'white'   // Font color of the hover labels
-            }
-        },
-          showlegend: false,
-          //legend: { font: { color: '#ffffff' } },
-          hovermode: 'x unified',
-          margin: { t: 50, r: 20, b: 80, l: 40 }
-      };
-
-      const config = {
-          responsive: true,
-          displayModeBar: true,
+            },
+            paper_bgcolor: 'rgb(44,48,52,0)',
+            plot_bgcolor: 'rgb(44,48,52,0)',
+            xaxis: {
+                title: 'Date',
+                gridcolor: '#3b4046',
+                color: '#ffffff',
+                tickformat: '%Y-%m-%d'
+            },
+            yaxis: {
+                gridcolor: '#3b4046',
+                color: '#ffffff'
+            },
+            hoverlabel: {
+                bgcolor: '#1a1a1a',  // Background color of the hover labels
+                font: {
+                    color: 'white'   // Font color of the hover labels
+                }
+            },
+            showlegend: false,
+            //legend: { font: { color: '#ffffff' } },
+            hovermode: 'x unified',
+            margin: { t: 50, r: 20, b: 80, l: 40 },
+            shapes: [
+                {
+                type: 'rect',
+                xref: 'x',
+                yref: 'paper', // Extends vertically over the whole plot
+                x0: todayString, // Start from today's date
+                x1: futureLimitString, // Example end date; replace with desired future limit
+                y0: 0,
+                y1: 1, // Covers full height of the plot
+                fillcolor: 'rgba(128, 128, 128, 0.2)', // Semi-transparent grey
+                line: {
+                    width: 0 // No border
+                },
+                layer: 'below',
+                }
+            ],
+        };
+        
+        const config = {
+            responsive: true,
+            displayModeBar: true,
           displaylogo: false
       };
 
       function updateChart(startDate, endDate) {
         //const startDate = new Date(document.getElementById('startDate').value);
         //const endDate = new Date(document.getElementById('endDate').value);
-        console.log("Start Date:", startDate);
-        console.log("End Date:", endDate);
-
-        
+    
         /*if (startDate > endDate) {
             alert('Start date must be before end date');
             return;
         }*/
 
-        const dates = generateDates(startDate, endDate);
+        const dates = generateDates(startDate, futureLimit);
         // TODO: replace with actual data fetching logic
         const predictions = generatePredictions(dates);
 
@@ -436,5 +453,6 @@
 - header
 - exchange
 - sentiment
-- history vs. future
+- overflow chart
+- fat sidebar
  -->

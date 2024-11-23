@@ -14,20 +14,22 @@
       }
       
       .sidebar {
-            height: 100%;
-            width: 75px;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-            white-space: nowrap;
-        }
-        
-        .sidebar a {
+        height: 100%;
+        width: 75px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        white-space: nowrap;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        /*background-color: #212529;*/
+        background-image: linear-gradient(to bottom right, #3d3e40, rgba(0, 0, 0, 0.691));
+      }
+
+      .sidebar a {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
             font-size: 25px;
@@ -74,7 +76,7 @@
       
       .card {
           /*background-color: #2c3034;*/
-          background-image: linear-gradient(to bottom right, #2c3034, black);
+          background-image: linear-gradient(to bottom right, #3d3e40, rgba(0, 0, 0, 0.691));
           border: none;
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
           display: flex;
@@ -121,6 +123,7 @@
       .chart-container {
           flex: 1;
           min-height: 400px;
+          
       }
 
       .btn-update {
@@ -208,17 +211,17 @@
         <div class="card chart-card">
             <div class="card-body">
                 <h5 class="card-title mb-4" style="text-align: center;">Forex Prediction Chart</h5>
-                <div class="datepicker-container">
+                <!--<div class="datepicker-container">
                     <input type="date" id="startDate" class="form-control" style="width: auto;">
                     <input type="date" id="endDate" class="form-control" style="width: auto;">
                     <button class="btn-update" onclick="updateChart()">Update Chart</button>
-                </div>
+                </div>-->
                 <div class="datepicker-container">
                   <button class="btn btn-outline-light" id="1-day">1D</button>
                   <button class="btn btn-outline-light" id="5-days">5D</button>
                   <button class="btn btn-outline-light" id="1-month">1M</button>
                   <button class="btn btn-outline-light" id="6-months">6M</button>
-                  <button class="btn btn-outline-light" id="yeat-to-date">YTD</button>
+                  <button class="btn btn-outline-light" id="year-to-date">YTD</button>
                   <button class="btn btn-outline-light" id="1-year">1Y</button>
                   <button class="btn btn-outline-light" id="5-years">5Y</button>
                 </div>              
@@ -242,8 +245,8 @@
       const fiveDaysAgo = new Date(today);
       fiveDaysAgo.setDate(today.getDate() - 5);
       
-      document.getElementById('startDate').value = fiveDaysAgo.toISOString().split('T')[0];
-      document.getElementById('endDate').value = today.toISOString().split('T')[0];
+      //document.getElementById('startDate').value = fiveDaysAgo.toISOString().split('T')[0];
+      //document.getElementById('endDate').value = today.toISOString().split('T')[0];
 
       // Plotly chart configuration
       const layout = {
@@ -251,8 +254,8 @@
               //text: 'Forex Prediction',
               font: { color: '#ffffff', size: 24 }
           },
-          paper_bgcolor: '#2c3034',
-          plot_bgcolor: '#2c3034',
+          paper_bgcolor: 'rgb(44,48,52,0)',
+          plot_bgcolor: 'rgb(44,48,52,0)',
           xaxis: {
               title: 'Date',
               gridcolor: '#3b4046',
@@ -260,15 +263,13 @@
               tickformat: '%Y-%m-%d'
           },
           yaxis: {
-            
-              
               gridcolor: '#3b4046',
               color: '#ffffff'
           },
           showlegend: true,
           legend: { font: { color: '#ffffff' } },
           hovermode: 'x unified',
-          margin: { t: 50, r: 20, b: 40, l: 40 }
+          margin: { t: 50, r: 20, b: 80, l: 40 }
       };
 
       const config = {
@@ -277,40 +278,52 @@
           displaylogo: false
       };
 
-      function updateChart() {
-          const startDate = new Date(document.getElementById('startDate').value);
-          const endDate = new Date(document.getElementById('endDate').value);
-          
-          if (startDate > endDate) {
-              alert('Start date must be before end date');
-              return;
-          }
+      function updateChart(startDate, endDate) {
+        //const startDate = new Date(document.getElementById('startDate').value);
+        //const endDate = new Date(document.getElementById('endDate').value);
+        console.log("Start Date:", startDate);
+        console.log("End Date:", endDate);
 
-          const dates = generateDates(startDate, endDate);
-          const predictions = generatePredictions(dates);
+        
+        /*if (startDate > endDate) {
+            alert('Start date must be before end date');
+            return;
+        }*/
 
-          const trace = {
-              x: dates,
-              y: predictions,
-              type: 'scatter',
-              mode: 'lines+markers',
-              name: 'USD/CAD',
-              line: { 
-                  shape: 'spline',
-                  color: '#0d6efd',
-                  width: 3
-              },
-              marker: {
-                  size: 8,
-                  color: '#0d6efd',
-                  line: {
-                      color: '#ffffff',
-                      width: 1
-                  }
+        const dates = generateDates(startDate, endDate);
+        // TODO: replace with actual data fetching logic
+        const predictions = generatePredictions(dates);
+
+        const trace = {
+          x: dates,
+          y: predictions,
+          type: 'scatter',
+          mode: 'lines+markers',
+          name: 'USD/CAD',
+          line: { 
+              shape: 'spline',
+              color: '#0d6efd',
+              width: 3
+          },
+          marker: {
+              size: 8,
+              color: '#0d6efd',
+              line: {
+                  color: '#ffffff',
+                  width: 1
               }
-          };
+          }
+        };
 
-          Plotly.newPlot('forecastChart', [trace], layout, config);
+        Plotly.newPlot('forecastChart', [trace], layout, config);
+      }
+
+
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
       }
 
       function generateDates(startDate, endDate) {
@@ -318,7 +331,7 @@
           let currentDate = new Date(startDate);
 
           while (currentDate <= endDate) {
-              dates.push(currentDate.toISOString().split('T')[0]);
+              dates.push(formatDate(currentDate));
               currentDate.setDate(currentDate.getDate() + 1);
           }
 
@@ -334,8 +347,56 @@
           });
       }
 
+      function setDateRange(days) {
+        const endDate = new Date();
+        let startDate;
+
+        switch (days) {
+          case '1D':
+              startDate = new Date(endDate); 
+              break;
+          case '5D':
+              startDate = new Date(endDate);
+              startDate.setDate(endDate.getDate() - 5);
+              break;
+          case '1M':
+              startDate = new Date(endDate);
+              startDate.setMonth(endDate.getMonth() - 1);
+              break;
+          case '6M':
+              startDate = new Date(endDate);
+              startDate.setMonth(endDate.getMonth() - 6);
+              break;
+          case 'YTD':
+              startDate = new Date(endDate.getFullYear(), 0, 1);
+              break;
+          case '1Y':
+              startDate = new Date(endDate);
+              startDate.setFullYear(endDate.getFullYear() - 1);
+              break;
+          case '5Y':
+              startDate = new Date(endDate);
+              startDate.setFullYear(endDate.getFullYear() - 5);
+              break;
+        }
+        
+        //document.getElementById('startDate').value = formatDate(startDate);
+        //document.getElementById('endDate').value = formatDate(endDate);
+
+        updateChart(startDate, endDate);
+      }
       // Initialize chart on load
-      document.addEventListener('DOMContentLoaded', updateChart);
+      document.addEventListener('DOMContentLoaded', () => {
+        updateChart(fiveDaysAgo, today);
+      });
+
+      document.getElementById('1-day').addEventListener('click', () => setDateRange('1D'));
+      document.getElementById('5-days').addEventListener('click', () => setDateRange('5D'));
+      document.getElementById('1-month').addEventListener('click', () => setDateRange('1M'));
+      document.getElementById('6-months').addEventListener('click', () => setDateRange('6M'));
+      document.getElementById('year-to-date').addEventListener('click', () => setDateRange('YTD'));
+      document.getElementById('1-year').addEventListener('click', () => setDateRange('1Y'));
+      document.getElementById('5-years').addEventListener('click', () => setDateRange('5Y'));
 
       // Update chart on window resize
       window.addEventListener('resize', () => {
@@ -347,3 +408,12 @@
   </script>
 </body>
 </html>
+
+
+<!-- TODO: 
+- header
+- exchange
+- sentiment
+- history vs. future
+- expand
+ -->

@@ -8,40 +8,40 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
-      body {
-          min-height: 100vh;
-          background-color: #1a1a1a;
-      }
-      
-      .sidebar {
-        height: 100%;
-        width: 75px;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        background-color: 1a1a1a;
-        border-right: 1px solid white;
-        transition: width 0.3s ease, border-right 0.3s ease;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-        white-space: nowrap;
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-      }
-
-      .sidebar a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
+        body {
+            min-height: 100vh;
+            background-color: #1a1a1a;
         }
         
-        .sidebar a:hover {
-            color: #f1f1f1;
+        .sidebar {
+            height: 100%;
+            width: 75px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: 1a1a1a;
+            border-right: 1px solid grey;
+            transition: width 0.3s ease, border-right 0.3s ease;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            white-space: nowrap;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
         }
+
+        .sidebar a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #cacbcb;
+                display: block;
+                transition: 0.3s;
+            }
+            
+            .sidebar a:hover {
+                color: #f1f1f1;
+            }
         
         .sidebar .closebtn {
             position: absolute;
@@ -60,94 +60,108 @@
             padding-bottom: 3px;
         }
       
-      .main-content {
-          flex-grow: 1;
-          margin-left: 100px;
-          padding: 20px;
-          height: 100vh;
-          overflow-y: auto;
-      }
+        .main-content {
+            flex-grow: 1;
+            margin-left: 100px;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 40px); /* Accounting for padding */
+            gap: 20px; /* This adds spacing between the cards */
+        }
       
-      .dashboard-container {
-          display: flex;
-          flex-direction: column;
-          height: calc(100vh - 40px); /* Accounting for padding */
-          gap: 20px; /* This adds spacing between the cards */
-      }
-      
-      .card {
-          /*background-color: #2c3034;*/
-          background-image: linear-gradient(to bottom right, #3d3e40, rgba(0, 0, 0, 0.691));
-          border: none;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          display: flex;
-          flex-direction: column;
-      }
+        .card {
+            /*background-color: #2c3034;*/
+            background-image: linear-gradient(to bottom right, #3d3e40, rgba(0, 0, 0, 0.691));
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
 
-      .chart-card {
-          flex: 2; /* Takes up 2/3 of the space */
-      }
+        .chart-card {
+            flex: 2; /* Takes up 2/3 of the space */
+        }
 
-      .sentiment-card {
-          flex: 1; /* Takes up 1/3 of the space */
-      }
-      
-      .card-body {
-          flex: 1;
-      }
-      
-      .datepicker-container {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 20px;
-          align-items: center;
-      }
-      
-      .nav-link {
-          color: rgba(255, 255, 255, .8);
-          transition: all 0.3s;
-      }
-      
-      .nav-link:hover {
-          color: #fff;
-          background-color: rgba(255, 255, 255, .1);
-      }
-      
-      .nav-link.active {
-          background-color: #0d6efd;
-      }
-      
-      .nav-link svg {
-          fill: currentColor;
-      }
-      
-      .chart-container {
-          flex: 1;
-          min-height: 400px;
-          
-      }
+        .sentiment-card {
+            flex: 1; /* Takes up 1/3 of the space */
+        }
 
-      .btn-update {
-          background-color: #0d6efd;
-          color: white;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-      }
+        .chart-card, .sentiment-card {
+            transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
+            border-radius: 15px;
+        }
 
-      .btn-update:hover {
-          background-color: #0b5ed7;
-      }
+        .chart-card:hover, .sentiment-card:hover {
+            transform: scale(1.01); /* Expands the card by 5% when hovered */
+        }
+      
+        .card-body {
+            flex: 1;
+        }
+        
+        .datepicker-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            align-items: center;
+        }
 
-      input[type="date"] {
-          background-color: #2c3034;
-          border: 1px solid #495057;
-          color: white;
-          padding: 6px 12px;
-          border-radius: 4px;
-      }
+        .btn {
+            padding: 0.375rem 1rem;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, .8);
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, .1);
+        }
+        
+        .nav-link.active {
+            background-color: #0d6efd;
+        }
+        
+        .nav-link svg {
+            fill: currentColor;
+        }
+        
+        .chart-container {
+            flex: 1;
+            min-height: 400px;
+            
+        }
+
+        .btn-update {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-update:hover {
+            background-color: #0b5ed7;
+        }
+
+        input[type="date"] {
+            background-color: #2c3034;
+            border: 1px solid #495057;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -211,7 +225,7 @@
     <div class="dashboard-container">
         <div class="card chart-card">
             <div class="card-body">
-                <h5 class="card-title mb-4" style="text-align: center;">Forex Prediction Chart</h5>
+                <h5 class="card-title mb-4" style="text-align: center; color:white;" >Forex Prediction Chart</h5>
                 <!--<div class="datepicker-container">
                     <input type="date" id="startDate" class="form-control" style="width: auto;">
                     <input type="date" id="endDate" class="form-control" style="width: auto;">
@@ -268,8 +282,14 @@
               gridcolor: '#3b4046',
               color: '#ffffff'
           },
-          showlegend: true,
-          legend: { font: { color: '#ffffff' } },
+          hoverlabel: {
+            bgcolor: '#1a1a1a',  // Background color of the hover labels
+            font: {
+                color: 'white'   // Font color of the hover labels
+            }
+        },
+          showlegend: false,
+          //legend: { font: { color: '#ffffff' } },
           hovermode: 'x unified',
           margin: { t: 50, r: 20, b: 80, l: 40 }
       };
@@ -301,7 +321,6 @@
           y: predictions,
           type: 'scatter',
           mode: 'lines+markers',
-          name: 'USD/CAD',
           line: { 
               shape: 'spline',
               color: '#0d6efd',
@@ -314,7 +333,8 @@
                   color: '#ffffff',
                   width: 1
               }
-          }
+          },
+          name: ''
         };
 
         Plotly.newPlot('forecastChart', [trace], layout, config);
@@ -417,5 +437,4 @@
 - exchange
 - sentiment
 - history vs. future
-- expand
  -->

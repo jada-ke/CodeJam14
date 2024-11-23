@@ -20,13 +20,14 @@
         z-index: 1;
         top: 0;
         left: 0;
+        background-color: 1a1a1a;
+        border-right: 1px solid white;
+        transition: width 0.3s ease, border-right 0.3s ease;
         overflow-x: hidden;
         transition: 0.5s;
         padding-top: 60px;
         white-space: nowrap;
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        /*background-color: #212529;*/
-        background-image: linear-gradient(to bottom right, #3d3e40, rgba(0, 0, 0, 0.691));
       }
 
       .sidebar a {
@@ -216,16 +217,17 @@
                     <input type="date" id="endDate" class="form-control" style="width: auto;">
                     <button class="btn-update" onclick="updateChart()">Update Chart</button>
                 </div>-->
-                <div class="datepicker-container">
-                  <button class="btn btn-outline-light" id="1-day">1D</button>
-                  <button class="btn btn-outline-light" id="5-days">5D</button>
-                  <button class="btn btn-outline-light" id="1-month">1M</button>
-                  <button class="btn btn-outline-light" id="6-months">6M</button>
-                  <button class="btn btn-outline-light" id="year-to-date">YTD</button>
-                  <button class="btn btn-outline-light" id="1-year">1Y</button>
-                  <button class="btn btn-outline-light" id="5-years">5Y</button>
-                </div>              
+                              
                 <div class="chart-container" id="forecastChart"></div>
+                <div class="datepicker-container">
+                    <button class="btn btn-outline-light" id="1-day">1D</button>
+                    <button class="btn btn-outline-light" id="5-days">5D</button>
+                    <button class="btn btn-outline-light" id="1-month">1M</button>
+                    <button class="btn btn-outline-light" id="6-months">6M</button>
+                    <button class="btn btn-outline-light" id="year-to-date">YTD</button>
+                    <button class="btn btn-outline-light" id="1-year">1Y</button>
+                    <button class="btn btn-outline-light" id="5-years">5Y</button>
+                  </div>
             </div>
         </div>
         

@@ -101,7 +101,7 @@
             flex: 2; /* Takes up 2/3 of the space */
         }
 
-        .converter-card {
+        .ranking-card {
             width: 30%;
             margin-left: 1vw;
         }
@@ -120,12 +120,12 @@
 
         }
 
-        .chart-card, .sentiment-card, .converter-card {
+        .chart-card, .sentiment-card, .ranking-card {
             transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
             border-radius: 15px;
         }
 
-        .chart-card:hover, .sentiment-card:hover, .converter-card:hover {
+        .chart-card:hover, .sentiment-card:hover, .ranking-card:hover {
             transform: scale(1.01); /* Expands the card by 5% when hovered */
         }
       
@@ -292,9 +292,10 @@
                 </div>
             </div>
     
-            <div class="card converter-card">
+            <div class="card ranking-card">
                 <div class="card-body">
-                    <h5 class="card-title">Currency Converter</h5>
+                    <h5 class="card-title">Feature Ranking</h5>
+                    <div class="chart-container" id="rankingChart"></div>
                 </div>
             </div>
         </div>
@@ -556,6 +557,66 @@
         window.onload = populateSentimentAnalysis;
 
 
+    </script>
+
+    <script>
+        var features = ['F1', 'F2', 'F3', 'F4', 'F5'];
+        var ranks = [1, 2, 3, 4, 5]; 
+
+        var data = [{
+            x: features,        
+            y: ranks,           
+            type: 'bar',        
+            marker: { color: 'royalblue' } 
+        }];
+
+        var layout2 = {
+            title: {
+              //text: 'Forex Prediction',
+              font: { color: '#ffffff', size: 24 }
+            },
+            paper_bgcolor: 'rgb(44,48,52,0)',
+            plot_bgcolor: 'rgb(44,48,52,0)',
+            xaxis: {
+                title: 'Feature',
+                gridcolor: '#3b4046',
+                color: '#ffffff',
+                tickformat: '%Y-%m-%d'
+            },
+            yaxis: {
+                title: 'Rank',
+                gridcolor: '#3b4046',
+                color: '#ffffff'
+            },
+            hoverlabel: {
+                bgcolor: '#1a1a1a',  // Background color of the hover labels
+                font: {
+                    color: 'white'   // Font color of the hover labels
+                }
+            },
+            showlegend: false,
+            //legend: { font: { color: '#ffffff' } },
+            hovermode: 'x unified',
+            margin: { t: 50, r: 20, b: 80, l: 40 },
+            shapes: [
+                {
+                type: 'rect',
+                xref: 'x',
+                yref: 'paper', // Extends vertically over the whole plot
+                x0: todayString, // Start from today's date
+                x1: futureLimitString, // Example end date; replace with desired future limit
+                y0: 0,
+                y1: 1, // Covers full height of the plot
+                fillcolor: 'rgba(128, 128, 128, 0.2)', // Semi-transparent grey
+                line: {
+                    width: 0 // No border
+                },
+                layer: 'below',
+                }
+            ],
+        };
+
+        Plotly.newPlot('rankingChart', data, layout2);
     </script>
 </body>
 </html>

@@ -247,6 +247,7 @@
             document.getElementById("header").style.marginLeft = "165px";
             document.getElementById("main").style.scale = "0.95";
             resizePlotlyChart('forecastChart', 1100, 200);
+            resizePlotlyChart('rankingChart', 300, 200);
             
             this.mini = false;
         } else {
@@ -256,6 +257,7 @@
             document.getElementById("header").style.marginLeft = "0px";
             document.getElementById("main").style.scale = "1.0";
             resizePlotlyChart('forecastChart', 1270, 200);
+            resizePlotlyChart('rankingChart', 355, 200);
             this.mini = true;
         }
     }

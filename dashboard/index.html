@@ -90,7 +90,8 @@
       
         .card {
             /*background-color: #2c3034;*/
-            background-image: linear-gradient(to bottom right, #47464687, #171616);
+
+            background-image: linear-gradient(to bottom right, #969697cb 0%, #5b5b5fb3 30%, #171616cc 100%);
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: flex;
@@ -135,6 +136,11 @@
 
         .card-title {
             color: white;
+            font-size: 1.5rem;
+        }
+
+        .sentiment-card .card-title {
+            margin-bottom: 20px;
         }
         
         .datepicker-container {
@@ -392,14 +398,14 @@
             mode: 'lines+markers',
             line: { 
                 shape: 'spline',
-                color: '#0d6efd',
+                color: '#00ff55',
                 width: 3
             },
             marker: {
                 size: 8,
-                color: '#0d6efd',
+                color: '#00ff55',
                 line: {
-                    color: '#ffffff',
+                    color: '#000000',
                     width: 1
                 }
             },
@@ -534,6 +540,8 @@
                 title.target = "_blank"; // Open in new tab
                 title.classList.add('sentiment-title');
                 title.textContent = article.title;
+                title.style.textDecoration = 'none';
+                title.style.color = 'white';
 
                 // Create sentiment score element
                 const score = document.createElement('span');
@@ -566,10 +574,11 @@
         var ranks = [1, 2, 3, 4, 5]; 
 
         var data = [{
-            x: features,        
-            y: ranks,           
+            x: ranks,           
+            y: features,    
+            orientation: 'h',    
             type: 'bar',        
-            marker: { color: 'royalblue' } 
+            marker: { color: '#00ff55' } 
         }];
 
         var layout2 = {
@@ -580,13 +589,13 @@
             paper_bgcolor: 'rgb(44,48,52,0)',
             plot_bgcolor: 'rgb(44,48,52,0)',
             xaxis: {
-                title: 'Feature',
+                title: 'Rank',
                 gridcolor: '#3b4046',
                 color: '#ffffff',
                 tickformat: '%Y-%m-%d'
             },
             yaxis: {
-                title: 'Rank',
+                title: 'Feature',
                 gridcolor: '#3b4046',
                 color: '#ffffff'
             },
@@ -600,22 +609,6 @@
             //legend: { font: { color: '#ffffff' } },
             hovermode: 'x unified',
             margin: { t: 50, r: 20, b: 80, l: 40 },
-            shapes: [
-                {
-                type: 'rect',
-                xref: 'x',
-                yref: 'paper', // Extends vertically over the whole plot
-                x0: todayString, // Start from today's date
-                x1: futureLimitString, // Example end date; replace with desired future limit
-                y0: 0,
-                y1: 1, // Covers full height of the plot
-                fillcolor: 'rgba(128, 128, 128, 0.2)', // Semi-transparent grey
-                line: {
-                    width: 0 // No border
-                },
-                layer: 'below',
-                }
-            ],
         };
 
         Plotly.newPlot('rankingChart', data, layout2);

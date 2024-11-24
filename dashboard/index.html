@@ -7,95 +7,97 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <style>
-      body {
-          min-height: 100vh;
-          background-color: #101214;
-      }
+    
+<style>
+    body {
+        min-height: 100vh;
+        background-color: black;
+    }
 
-      header {
-        height: 10vh;
-        width: calc(100% - 84px);
+    header {
+      height: 10vh;
+      width: calc(100% - 84px);
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 84px;
+      z-index: 1000;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: rgb(39, 39, 39);
+      color: white;
+      padding: 15px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-left: 1px solid grey;
+      transition: 0.5s;
+    }
+    
+    .sidebar {
+      height: calc(100% - 10vh);
+      width: 85px;
+      position: fixed;
+      z-index: 1;
+      top: 3vh;
+      left: 0;
+      border-right: 1px solid grey;
+      transition: width 0.3s ease, border-right 0.3s ease;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      white-space: nowrap;
+      box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    }
+
+    .sidebar a {
+            padding: 8px 8px 8px 31px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #cacbcb;
+            display: block;
+            transition: 0.3s;
+        }
+        
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+    
+    
+    .material-icons,
+    .icon-text {
+        vertical-align: middle;
+    }
+    
+    .material-icons {
+        padding-bottom: 3px;
+    }
+
+    .main-content {
+        transition: 0.5s;
+        flex-grow: 1;
+        margin-left: 100px;
+        padding: 20px;
+        height: 100vh;
+        overflow-y: auto;
+        height: calc(100vh - 10vh);
+        margin-top: 10vh;
+    }
+    
+    .dashboard-container {
         display: flex;
-        position: fixed;
-        top: 0;
-        left: 84px;
-        z-index: 1000;
-        justify-content: flex-start;
-        align-items: center;
-        background-color: #282f35;
-        color: white;
-        padding: 15px 30px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border-left: 1px solid grey;
-        transition: 0.5s;
-      }
-      
-      .sidebar {
-        height: calc(100% - 10vh);
-        width: 85px;
-        position: fixed;
-        z-index: 1;
-        top: 3vh;
-        left: 0;
-        border-right: 1px solid grey;
-        transition: width 0.3s ease, border-right 0.3s ease;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-        white-space: nowrap;
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-      }
+        flex-direction: column;
+        height: calc(100vh - 40px); /* Accounting for padding */
+        gap: 20px; /* This adds spacing between the cards */
+    }
 
-        .sidebar a {
-                padding: 8px 8px 8px 31px;
-                text-decoration: none;
-                font-size: 20px;
-                color: #cacbcb;
-                display: block;
-                transition: 0.3s;
-            }
-            
-            .sidebar a:hover {
-                color: #f1f1f1;
-            }
-        
-        
-        .material-icons,
-        .icon-text {
-            vertical-align: middle;
-        }
-        
-        .material-icons {
-            padding-bottom: 3px;
-        }
-      
-        .main-content {
-            transition: 0.5s;
-            flex-grow: 1;
-            margin-left: 100px;
-            padding: 20px;
-            height: 100vh;
-            overflow-y: auto;
-            height: calc(100vh - 10vh);
-            margin-top: 10vh;
-        }
-        
-        .dashboard-container {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 40px); /* Accounting for padding */
-            gap: 20px; /* This adds spacing between the cards */
-        }
-      
-        .card {
-            /*background-color: #2c3034;*/
-            background-image: linear-gradient(to bottom right, #282f35, #181f25);
-            border: none;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
+    .card {
+        /*background-color: #2c3034;*/
+
+        background-image: linear-gradient(to bottom right, #969697cb 0%, #5b5b5fb3 30%, #171616cc 100%);
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
 
     .chart-card {
         flex: 2; /* Takes up 2/3 of the space */
@@ -317,17 +319,13 @@
         const fiveDaysAgo = new Date(today);
         fiveDaysAgo.setDate(today.getDate() - 5);
         const futureLimit = new Date(today);
-        futureLimit.setDate(today.getDate() + 7);
+        futureLimit.setDate(today.getDate() + 30);
         const futureLimitString = futureLimit.toISOString().split('T')[0];
-        
-        //document.getElementById('startDate').value = fiveDaysAgo.toISOString().split('T')[0];
-        //document.getElementById('endDate').value = today.toISOString().split('T')[0];
-        
+
         // Plotly chart configuration
         const layout = {
             title: {
-              //text: 'Forex Prediction',
-              font: { color: '#ffffff', size: 24 }
+                font: { color: '#ffffff', size: 24 }
             },
             paper_bgcolor: 'rgb(44,48,52,0)',
             plot_bgcolor: 'rgb(44,48,52,0)',
@@ -342,115 +340,109 @@
                 color: '#ffffff'
             },
             hoverlabel: {
-                bgcolor: '#1a1a1a',  // Background color of the hover labels
+                bgcolor: '#1a1a1a',
                 font: {
-                    color: 'white'   // Font color of the hover labels
+                    color: 'white'
                 }
             },
             showlegend: false,
-            //legend: { font: { color: '#ffffff' } },
             hovermode: 'x unified',
             margin: { t: 50, r: 20, b: 80, l: 40 },
             shapes: [
                 {
-                type: 'rect',
-                xref: 'x',
-                yref: 'paper', // Extends vertically over the whole plot
-                x0: todayString, // Start from today's date
-                x1: futureLimitString, // Example end date; replace with desired future limit
-                y0: 0,
-                y1: 1, // Covers full height of the plot
-                fillcolor: 'rgba(128, 128, 128, 0.2)', // Semi-transparent grey
-                line: {
-                    width: 0 // No border
-                },
-                layer: 'below',
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'paper',
+                    x0: todayString,
+                    x1: futureLimitString,
+                    y0: 0,
+                    y1: 1,
+                    fillcolor: 'rgba(128, 128, 128, 0.2)',
+                    line: {
+                        width: 0
+                    },
+                    layer: 'below',
                 }
             ],
         };
-        
+
         const config = {
             responsive: true,
             displayModeBar: true,
             displaylogo: false
         };
 
-        function updateChart(startDate, endDate) {
-            //const startDate = new Date(document.getElementById('startDate').value);
-            //const endDate = new Date(document.getElementById('endDate').value);
-        
-            /*if (startDate > endDate) {
-                alert('Start date must be before end date');
-                return;
-            }*/
 
-            const dates = generateDates(startDate, futureLimit);
-            // TODO: replace with actual data fetching logic
-            const predictions = generatePredictions(dates);
+        async function fetchPredictionData() {
+            try {
+                const response = await fetch('thirty_day_prediction.csv');
+                const csvText = await response.text();
+                const rows = csvText.split('\n').slice(1); 
+                return rows.map(row => {
+                    const [date, predictedClose] = row.split(',');
+                    return {
+                        date: date.trim(),
+                        predictedClose: parseFloat(predictedClose)
+                    };
+                }).filter(item => item.date && !isNaN(item.predictedClose)); 
+            } catch (error) {
+                console.error('Error fetching prediction data:', error);
+                return [];
+            }
+        }
 
-            const trace = {
-            x: dates,
-            y: predictions,
-            type: 'scatter',
-            mode: 'lines+markers',
-            line: { 
-                shape: 'spline',
-                color: '#00ff55',
-                width: 3
-            },
-            marker: {
-                size: 8,
-                color: '#150016',
-                line: {
-                    color: '#00ff55',
-                    width: 1
-                }
-            },
-            name: ''
-            };
+        async function updateChart(startDate, endDate) {
+            try {
+                const predictionData = await fetchPredictionData();
+                
+                // Filter data based on date range
+                const filteredData = predictionData.filter(item => {
+                    const itemDate = new Date(item.date);
+                    return itemDate >= startDate && itemDate <= futureLimit;
+                });
 
-        Plotly.newPlot('forecastChart', [trace], layout, config);
-      }
+                const trace = {
+                    x: filteredData.map(item => item.date),
+                    y: filteredData.map(item => item.predictedClose),
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    line: {
+                        shape: 'spline',
+                        color: '#00ff55',
+                        width: 3
+                    },
+                    marker: {
+                        size: 8,
+                        color: '#00ff55',
+                        line: {
+                            color: '#000000',
+                            width: 1
+                        }
+                    },
+                    name: ''
+                };
+
+                Plotly.newPlot('forecastChart', [trace], layout, config);
+            } catch (error) {
+                console.error('Error updating chart:', error);
+            }
+        }
 
         function resizePlotlyChart(chartId, newWidth, newHeight) {
             const chartContainer = document.getElementById(chartId);
-
             chartContainer.style.width = newWidth + "px";
             chartContainer.style.height = newHeight + "px";
-
             Plotly.relayout(chartId, {
                 width: chartContainer.offsetWidth,
                 height: chartContainer.offsetHeight
             });
         }
 
-
         function formatDate(date) {
             const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
             return `${year}-${month}-${day}`;
-        }
-
-        function generateDates(startDate, endDate) {
-            const dates = [];
-            let currentDate = new Date(startDate);
-
-            while (currentDate <= endDate) {
-                dates.push(formatDate(currentDate));
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-
-            return dates;
-        }
-
-        function generatePredictions(dates) {
-            const baseValue = 1.12;
-            const volatility = 0.005;
-            return dates.map((_, index) => {
-                const randomChange = (Math.random() - 0.5) * volatility;
-                return (baseValue + index * 0.01 + randomChange).toFixed(4);
-            });
         }
 
         function setDateRange(days) {
@@ -458,44 +450,43 @@
             let startDate;
 
             switch (days) {
-            case '1D':
-                startDate = new Date(endDate); 
-                break;
-            case '5D':
-                startDate = new Date(endDate);
-                startDate.setDate(endDate.getDate() - 5);
-                break;
-            case '1M':
-                startDate = new Date(endDate);
-                startDate.setMonth(endDate.getMonth() - 1);
-                break;
-            case '6M':
-                startDate = new Date(endDate);
-                startDate.setMonth(endDate.getMonth() - 6);
-                break;
-            case 'YTD':
-                startDate = new Date(endDate.getFullYear(), 0, 1);
-                break;
-            case '1Y':
-                startDate = new Date(endDate);
-                startDate.setFullYear(endDate.getFullYear() - 1);
-                break;
-            case '5Y':
-                startDate = new Date(endDate);
-                startDate.setFullYear(endDate.getFullYear() - 5);
-                break;
+                case '1D':
+                    startDate = new Date(endDate);
+                    break;
+                case '5D':
+                    startDate = new Date(endDate);
+                    startDate.setDate(endDate.getDate() - 5);
+                    break;
+                case '1M':
+                    startDate = new Date(endDate);
+                    startDate.setMonth(endDate.getMonth() - 1);
+                    break;
+                case '6M':
+                    startDate = new Date(endDate);
+                    startDate.setMonth(endDate.getMonth() - 6);
+                    break;
+                case 'YTD':
+                    startDate = new Date(endDate.getFullYear(), 0, 1);
+                    break;
+                case '1Y':
+                    startDate = new Date(endDate);
+                    startDate.setFullYear(endDate.getFullYear() - 1);
+                    break;
+                case '5Y':
+                    startDate = new Date(endDate);
+                    startDate.setFullYear(endDate.getFullYear() - 5);
+                    break;
             }
-            
-            //document.getElementById('startDate').value = formatDate(startDate);
-            //document.getElementById('endDate').value = formatDate(endDate);
 
             updateChart(startDate, endDate);
         }
+
         // Initialize chart on load
         document.addEventListener('DOMContentLoaded', () => {
             updateChart(fiveDaysAgo, today);
         });
 
+        // Add event listeners for date range buttons
         document.getElementById('1-day').addEventListener('click', () => setDateRange('1D'));
         document.getElementById('5-days').addEventListener('click', () => setDateRange('5D'));
         document.getElementById('1-month').addEventListener('click', () => setDateRange('1M'));
@@ -567,8 +558,8 @@
     </script>
 
     <script>
-        var features = ['Open', 'High', 'Low', 'GDP USD', 'CPI USD', 'Interest Rate USD', 'CPI CAD', 'GDP CAD', 'Interest Rate CAD'];
-        var ranks = [822, 432, 372, 137, 120, 105, 75, 53, 32]; 
+        var features = ['F1', 'F2', 'F3', 'F4', 'F5'];
+        var ranks = [1, 2, 3, 4, 5]; 
 
         var data = [{
             x: ranks,           
@@ -592,7 +583,7 @@
                 tickformat: '%Y-%m-%d'
             },
             yaxis: {
-                title: 'f1 score',
+                title: 'Feature',
                 gridcolor: '#3b4046',
                 color: '#ffffff'
             },

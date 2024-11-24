@@ -6,8 +6,9 @@
     <title>Forex Dashboard</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
 <style>
     body {
         min-height: 100vh;
@@ -49,25 +50,25 @@
     }
 
     .sidebar a {
-            padding: 8px 8px 8px 31px;
-            text-decoration: none;
-            font-size: 20px;
-            color: #cacbcb;
-            display: block;
-            transition: 0.3s;
-        }
-        
-        .sidebar a:hover {
-            color: #f1f1f1;
-        }
+        padding: 8px 8px 8px 31px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #cacbcb;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .sidebar a:hover {
+        color: #f1f1f1;
+    }
     
     
-    .material-icons,
+    .material-symbols-outlined,
     .icon-text {
         vertical-align: middle;
     }
     
-    .material-icons {
+    .material-symbols-outlined {
         padding-bottom: 3px;
     }
 
@@ -104,13 +105,18 @@
 
     .sentiment-card {
         flex: 1; /* Takes up 1/3 of the space */
-        width: 50%;
+        width: 60%;
+        max-height: 400px;  /* Set a fixed height for the container */
+        overflow-y: auto;   /* Enable vertical scrolling if content exceeds the height */
+        padding: 0;
     }
     
     .ranking-card {
-        width: 50%;
+        width: 40%;
         margin-left: 1vw;
+        max-height: 500px;
     }
+
     .flex-container {
         display: flex;
         flex-wrap: wrap;
@@ -132,9 +138,71 @@
         flex: 1;
     }
 
-    .card-title {
+
+    .d-flex1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;  /* Light border around each article */
+        border-radius: 0px;      /* Slightly rounded corners */
+        height: 150px;
+    }
+
+    .left-column {
+        flex: 1; /* This takes up the remaining space on the left */
+        display: flex;
+        flex-direction: column; /* Stack title and snippet vertically */
+        margin-right: 5px;
+    }
+
+    .snippet {
+        font-size: 0.9em;
+    }
+
+    .published_date {
+        font-size: 0.7em;
+        margin-top: 0;
+        color:#b6b6b6;
+    }
+
+    .sentiment-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #ffffff; /* Blue color for links */
+        text-decoration: none; /* Remove default underline */
+        transition: color 0.3s ease;
+    }
+
+    .sentiment-title:hover {
+        color: #0056b3; /* Darker blue color on hover */
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .badge {
+        font-size: 0.9em;
+        padding: 5px 10px;
+        border-radius: 20px;
         color: white;
-        font-size: 1.5rem;
+    }
+
+    .bg-success {
+        background-color: #28a745;  /* Green for positive sentiment */
+    }
+
+    .bg-warning {
+        background-color: #ffc107;  /* Yellow for neutral sentiment */
+    }
+
+    .bg-danger {
+        background-color: #dc3545;  /* Red for negative sentiment */
+    }
+
+
+    .card-title {
+        color: #00ff55;
+        font-size: 2.0rem;
     }
 
     .sentiment-card .card-title {
@@ -173,7 +241,7 @@
     
     .chart-container {
         flex: 1;
-        min-height: 400px;
+        min-height: 350px;
     }
 
     .btn-update {
@@ -232,40 +300,40 @@
   
   <div class="sidebar" id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
     <div class="d-flex flex-column h-100">
-        <a href="#"><span><i class="material-icons">info</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;about</span></a><br>
-        <a href="#"><i class="material-icons">spa</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;services</a></span>
+        <a href="#"><span><i class="material-symbols-outlined">info</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;About</span></a><br>
+        <a href="#"><i class="material-symbols-outlined">chart_data</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ForEx Prediction</a></span>
         </a><br>
-        <a href="#"><i class="material-icons">monetization_on</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clients</span></a><br>
-        <a href="#"><i class="material-icons">email</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contact<span></a>
+        <a href="#"><i class="material-symbols-outlined">newsmode</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;News Analysis</span></a><br>
+        <a href="#"><i class="material-symbols-outlined">sort</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Feature Ranking<span></a>
     </div>
   </div>
 
     <script>
         var mini = true;
 
-    function toggleSidebar() {
-        if (mini) {
-            console.log("opening sidebar");
-            document.getElementById("mySidebar").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
-            document.getElementById("header").style.marginLeft = "165px";
-            document.getElementById("main").style.scale = "0.95";
-            resizePlotlyChart('forecastChart', 1100, 200);
-            resizePlotlyChart('rankingChart', 300, 200);
-            
-            this.mini = false;
-        } else {
-            console.log("closing sidebar");
-            document.getElementById("mySidebar").style.width = "85px";
-            document.getElementById("main").style.marginLeft = "100px";
-            document.getElementById("header").style.marginLeft = "0px";
-            document.getElementById("main").style.scale = "1.0";
-            resizePlotlyChart('forecastChart', 1270, 200);
-            resizePlotlyChart('rankingChart', 355, 200);
-            this.mini = true;
+        function toggleSidebar() {
+            if (mini) {
+                console.log("opening sidebar");
+                document.getElementById("mySidebar").style.width = "250px";
+                document.getElementById("main").style.marginLeft = "250px";
+                document.getElementById("header").style.marginLeft = "165px";
+                document.getElementById("main").style.scale = "0.95";
+                resizePlotlyChart('forecastChart', 1100, 200);
+                resizePlotlyChart('rankingChart', 400, 200);
+                
+                this.mini = false;
+            } else {
+                console.log("closing sidebar");
+                document.getElementById("mySidebar").style.width = "85px";
+                document.getElementById("main").style.marginLeft = "100px";
+                document.getElementById("header").style.marginLeft = "0px";
+                document.getElementById("main").style.scale = "1.0";
+                resizePlotlyChart('forecastChart', 1270, 200);
+                resizePlotlyChart('rankingChart', 455, 200);
+                this.mini = true;
+            }
         }
-    }
-  </script>
+    </script>
 
     <main class="main-content" id="main">
         <div class="dashboard-container">
@@ -495,6 +563,16 @@
             }
         }
 
+        function resizePlotlyChart(chartId, newWidth, newHeight) {
+            const chartContainer = document.getElementById(chartId);
+            chartContainer.style.width = newWidth + "px";
+            chartContainer.style.height = newHeight + "px";
+            Plotly.relayout(chartId, {
+                width: chartContainer.offsetWidth,
+                height: chartContainer.offsetHeight
+            });
+        }
+
         function formatDate(date) {
             const year = date.getFullYear();
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -552,50 +630,92 @@
 
         // sentiment analysis
         // TODO: replace with actual data fetching logic
-        const sentimentData = [
-            { title: 'Article 1', url: 'https://example.com/article1', sentiment: 0.8 },
-            { title: 'Article 2', url: 'https://example.com/article2', sentiment: 0.6 },
-            { title: 'Article 3', url: 'https://example.com/article3', sentiment: 0.4 },
-            { title: 'Article 4', url: 'https://example.com/article4', sentiment: 0.2 },
-            { title: 'Article 5', url: 'https://example.com/article5', sentiment: 0.1 }
-        ];
+        // sentiment analysis
+        async function fetchSentimentData() {
+            const response = await fetch('nyt_articles_sentiment_scaled.csv'); // Ensure this path is correct
+            const csvText = await response.text();
+
+            // Parse the CSV using PapaParse
+            const parsedData = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+
+            // Map the CSV rows to the sentimentData format
+            const sentimentData = parsedData.data.map(row => {
+                return {
+                    title: row.title,
+                    snippet: row.snippet,
+                    published_date: row.published_date,
+                    url: row.url,
+                    sentiment: row.sentiment_label,
+                    sentiment_score: parseFloat(row.scaled_score) // Use the scaled_score as the sentiment score
+                };
+            });
+
+            return sentimentData;
+        }
 
         function populateSentimentAnalysis() {
             const sentimentContainer = document.querySelector('.sentiment-card .card-body');
             const cardTitle = sentimentContainer.querySelector('.card-title');
-            sentimentContainer.innerHTML = '';
+            sentimentContainer.innerHTML = '';  // Clear any existing content
             sentimentContainer.appendChild(cardTitle);
 
-            sentimentData.forEach(article => {
-                const articleElement = document.createElement('div');
-                articleElement.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'mb-3');
+            // Fetch the sentiment data
+            fetchSentimentData().then(sentimentData => {
+                const firstFiveArticles = sentimentData.slice(0, 25);  // Only display the first n articles
 
-                const title = document.createElement('a');
-                title.href = article.url;
-                title.target = "_blank"; // Open in new tab
-                title.classList.add('sentiment-title');
-                title.textContent = article.title;
-                title.style.textDecoration = 'none';
-                title.style.color = 'white';
+                firstFiveArticles.forEach(article => {
+                    const articleElement = document.createElement('div');
+                    articleElement.classList.add('d-flex1');  // Flex container for article layout
 
-                // Create sentiment score element
-                const score = document.createElement('span');
-                score.classList.add('badge', getBadgeClass(article.sentiment));
-                score.textContent = article.sentiment.toFixed(2); // Format the sentiment score
+                    // Left column (title + snippet)
+                    const leftColumn = document.createElement('div');
+                    leftColumn.classList.add('left-column');
 
-                // Append title and score to the item
-                articleElement.appendChild(title);
-                articleElement.appendChild(score);
+                    // Create article title as a clickable link
+                    const title = document.createElement('a');
+                    title.href = article.url;
+                    title.target = "_blank"; // Open in new tab
+                    title.classList.add('sentiment-title');
+                    title.textContent = article.title;
 
-                // Add the sentiment item to the sentiment box
-                sentimentContainer.appendChild(articleElement);
+                    // Create snippet paragraph under the title
+                    const snippet = document.createElement('p');
+                    snippet.classList.add('snippet');
+                    snippet.textContent = article.snippet || 'No snippet available';  // Default if snippet is empty
+
+                    const published_date = document.createElement('p');
+                    published_date.classList.add('published_date');
+                    published_date.textContent = article.published_date || ''; 
+
+                    leftColumn.appendChild(title);
+                    leftColumn.appendChild(snippet);
+                    leftColumn.appendChild(published_date);
+
+                    // Right column (sentiment score)
+                    const rightColumn = document.createElement('div');
+                    rightColumn.classList.add('right-column');
+
+                    // Create sentiment score element
+                    const score = document.createElement('span');
+                    score.classList.add('badge', getBadgeClass(article.sentiment));
+                    score.textContent = article.sentiment_score.toFixed(2); // Format the sentiment score
+
+                    rightColumn.appendChild(score);
+                    // Append title and score to the item
+                    articleElement.appendChild(leftColumn);
+                    articleElement.appendChild(rightColumn);
+
+                    // Add the article item to the sentiment box
+                    sentimentContainer.appendChild(articleElement);
+                });
+            }).catch(error => {
+                console.error("Error loading or parsing CSV data:", error);
             });
         }
 
         function getBadgeClass(sentiment) {
-            // TODO: change badge colors
-            if (sentiment >= 0.7) return 'bg-success';
-            if (sentiment >= 0.4) return 'bg-warning';
+            if (sentiment == 'positive') return 'bg-success';
+            if (sentiment == 'neutral') return 'bg-warning';
             return 'bg-danger';
         }
 

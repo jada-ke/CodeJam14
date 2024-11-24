@@ -23,11 +23,12 @@
         z-index: 1000;
         justify-content: flex-start;
         align-items: center;
-        background-color: #3d3e40;
+        background-color: rgb(39, 39, 39);
         color: white;
         padding: 15px 30px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border-left: 1px solid grey;
+        transition: 0.5s;
       }
       
       .sidebar {
@@ -35,7 +36,7 @@
         width: 85px;
         position: fixed;
         z-index: 1;
-        top: 10vh;
+        top: 3vh;
         left: 0;
         border-right: 1px solid grey;
         transition: width 0.3s ease, border-right 0.3s ease;
@@ -47,7 +48,7 @@
       }
 
         .sidebar a {
-                padding: 8px 8px 8px 32px;
+                padding: 8px 8px 8px 31px;
                 text-decoration: none;
                 font-size: 20px;
                 color: #cacbcb;
@@ -70,7 +71,7 @@
         }
       
         .main-content {
-            transition: 0.4s;
+            transition: 0.5s;
             flex-grow: 1;
             margin-left: 100px;
             padding: 20px;
@@ -100,17 +101,31 @@
             flex: 2; /* Takes up 2/3 of the space */
         }
 
-        .sentiment-card {
-            flex: 1; /* Takes up 1/3 of the space */
+        .converter-card {
+            width: 30%;
+            margin-left: 1vw;
         }
 
+        .sentiment-card {
+            flex: 1; /* Takes up 1/3 of the space */
+            width: 70%;
+            margin-right: 2vw;
+        }
 
-        .chart-card, .sentiment-card {
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: space-around;
+
+        }
+
+        .chart-card, .sentiment-card, .converter-card {
             transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
             border-radius: 15px;
         }
-        
-        .chart-card:hover, .sentiment-card:hover {
+
+        .chart-card:hover, .sentiment-card:hover, .converter-card:hover {
             transform: scale(1.01); /* Expands the card by 5% when hovered */
         }
       
@@ -155,7 +170,6 @@
         .chart-container {
             flex: 1;
             min-height: 400px;
-            
         }
 
         .btn-update {
@@ -206,44 +220,46 @@
         </symbol>
     </svg>
 
-    <header>
-        <div>
-            <h1> News4X </h1>
-        </div>
-    </header>
-    
-    <div class="sidebar" id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
-        <div class="d-flex flex-column h-100">
-            <a href="#"><span><i class="material-icons">info</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;about</span></a><br>
-            <a href="#"><i class="material-icons">spa</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;services</a></span>
-            </a><br>
-            <a href="#"><i class="material-icons">monetization_on</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clients</span></a><br>
-            <a href="#"><i class="material-icons">email</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contact<span></a>
-        </div>
+  <header id="header">
+    <div>
+        <h1> News4X </h1>
     </div>
+  </header>
+  
+  <div class="sidebar" id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
+    <div class="d-flex flex-column h-100">
+        <a href="#"><span><i class="material-icons">info</i><span class="icon-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;about</span></a><br>
+        <a href="#"><i class="material-icons">spa</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;services</a></span>
+        </a><br>
+        <a href="#"><i class="material-icons">monetization_on</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clients</span></a><br>
+        <a href="#"><i class="material-icons">email</i><span class="icon-text"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contact<span></a>
+    </div>
+  </div>
 
     <script>
         var mini = true;
 
-        function toggleSidebar() {
-            if (mini) {
-                console.log("opening sidebar");
-                document.getElementById("mySidebar").style.width = "250px";
-                document.getElementById("main").style.marginLeft = "250px";
-                document.getElementById("main").style.scale = "0.95";
-                document.getElementById("main").style.scale = "0.95";
-                document.getElementById("forecastChart").style.width = "20%";
-                this.mini = false;
-            } else {
-                console.log("closing sidebar");
-                document.getElementById("mySidebar").style.width = "85px";
-                document.getElementById("main").style.marginLeft = "100px";
-                document.getElementById("main").style.scale = "1.0";
-                forecastChart.style.width = "calc(100% - 85px)";
-                this.mini = true;
-            }
+    function toggleSidebar() {
+        if (mini) {
+            console.log("opening sidebar");
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            document.getElementById("header").style.marginLeft = "165px";
+            document.getElementById("main").style.scale = "0.95";
+            resizePlotlyChart('forecastChart', 1100, 200);
+            
+            this.mini = false;
+        } else {
+            console.log("closing sidebar");
+            document.getElementById("mySidebar").style.width = "85px";
+            document.getElementById("main").style.marginLeft = "100px";
+            document.getElementById("header").style.marginLeft = "0px";
+            document.getElementById("main").style.scale = "1.0";
+            resizePlotlyChart('forecastChart', 1270, 200);
+            this.mini = true;
         }
-    </script>
+    }
+  </script>
 
     <main class="main-content" id="main">
         <div class="dashboard-container">
@@ -269,13 +285,23 @@
             </div>
         </div>
         
-        <div class="card sentiment-card">
-            <div class="card-body">
-                <h5 class="card-title">Sentiment Analysis</h5>
+        <div class="flex-container">
+            <div class="card sentiment-card">
+                <div class="card-body">
+                    <h5 class="card-title">Sentiment Analysis</h5>
+                </div>
+            </div>
+    
+            <div class="card converter-card">
+                <div class="card-body">
+                    <h5 class="card-title">Currency Converter</h5>
+                </div>
             </div>
         </div>
-        </div>
-    </main>
+        
+    </div>
+</main>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -377,8 +403,21 @@
             name: ''
             };
 
-            Plotly.newPlot('forecastChart', [trace], layout, config);
+        Plotly.newPlot('forecastChart', [trace], layout, config);
+      }
+
+        function resizePlotlyChart(chartId, newWidth, newHeight) {
+            const chartContainer = document.getElementById(chartId);
+
+            chartContainer.style.width = newWidth + "px";
+            chartContainer.style.height = newHeight + "px";
+
+            Plotly.relayout(chartId, {
+                width: chartContainer.offsetWidth,
+                height: chartContainer.offsetHeight
+            });
         }
+
 
         function formatDate(date) {
             const year = date.getFullYear();
